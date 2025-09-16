@@ -3,7 +3,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import StudentDashboard from '@/components/StudentDashboard';
 import TeacherDashboard from '@/components/TeacherDashboard';
 import { Button } from '@/components/ui/button';
-import { LogOut } from 'lucide-react';
+import { LogOut, BookOpen } from 'lucide-react';
 
 const Dashboard = () => {
   const { profile, signOut, loading } = useAuth();
@@ -11,9 +11,12 @@ const Dashboard = () => {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-          <p className="text-muted-foreground">Loading...</p>
+        <div className="text-center animate-slide-up">
+          <div className="relative mb-6">
+            <div className="animate-spin rounded-full h-16 w-16 border-4 border-primary/20 border-t-primary mx-auto"></div>
+            <BookOpen className="h-8 w-8 text-primary absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" />
+          </div>
+          <p className="text-muted-foreground text-lg">Loading your dashboard...</p>
         </div>
       </div>
     );
@@ -31,27 +34,42 @@ const Dashboard = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <header className="border-b bg-card">
-        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <div>
-            <h1 className="text-2xl font-bold text-foreground">EduConnect</h1>
-            <p className="text-sm text-muted-foreground">
-              Welcome back, {profile.full_name} ({profile.role})
-            </p>
+      <header className="border-b bg-card/80 backdrop-blur-md sticky top-0 z-50">
+        <div className="container mx-auto px-6 py-4 flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-3">
+              <BookOpen className="h-8 w-8 text-primary" />
+              <h1 className="text-2xl font-bold text-gradient">EduConnect</h1>
+            </div>
+            <div className="hidden md:block h-6 w-px bg-border"></div>
+            <div className="hidden md:block">
+              <p className="text-lg font-semibold text-foreground">
+                Welcome back, {profile.full_name}
+              </p>
+              <p className="text-sm text-muted-foreground capitalize">
+                {profile.role} Dashboard
+              </p>
+            </div>
           </div>
-          <Button variant="outline" onClick={signOut} className="flex items-center gap-2">
+          <Button 
+            variant="outline" 
+            onClick={signOut} 
+            className="flex items-center gap-2 hover:bg-destructive/10 hover:text-destructive hover:border-destructive/20"
+          >
             <LogOut className="h-4 w-4" />
-            Sign Out
+            <span className="hidden sm:inline">Sign Out</span>
           </Button>
         </div>
       </header>
 
-      <main className="container mx-auto px-4 py-8">
-        {profile.role === 'student' ? (
-          <StudentDashboard />
-        ) : (
-          <TeacherDashboard />
-        )}
+      <main className="container mx-auto px-6 py-8">
+        <div className="animate-fade-in-delay">
+          {profile.role === 'student' ? (
+            <StudentDashboard />
+          ) : (
+            <TeacherDashboard />
+          )}
+        </div>
       </main>
     </div>
   );

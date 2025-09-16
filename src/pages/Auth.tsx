@@ -61,51 +61,71 @@ const Auth = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background px-4">
-      <div className="w-full max-w-md">
-        <div className="text-center mb-8">
-          <div className="flex items-center justify-center mb-4">
-            <BookOpen className="h-12 w-12 text-primary" />
+    <div className="min-h-screen flex items-center justify-center relative overflow-hidden">
+      {/* Background Elements */}
+      <div className="absolute inset-0 hero-gradient opacity-5"></div>
+      <div className="absolute top-20 left-20 w-72 h-72 bg-primary/10 rounded-full blur-3xl"></div>
+      <div className="absolute bottom-20 right-20 w-96 h-96 bg-accent/10 rounded-full blur-3xl"></div>
+
+      <div className="w-full max-w-md relative z-10 px-4">
+        <div className="text-center mb-8 animate-slide-up">
+          <div className="flex items-center justify-center mb-6">
+            <div className="relative">
+              <BookOpen className="h-16 w-16 text-primary" />
+              <div className="absolute -inset-2 bg-primary/20 rounded-full blur-xl"></div>
+            </div>
           </div>
-          <h1 className="text-3xl font-bold text-foreground">EduConnect</h1>
-          <p className="text-muted-foreground mt-2">Connect students and teachers</p>
+          <h1 className="text-4xl font-bold text-gradient mb-3">EduConnect</h1>
+          <p className="text-muted-foreground text-lg">Connect students and teachers</p>
         </div>
 
-        <Tabs defaultValue="signin" className="w-full">
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="signin">Sign In</TabsTrigger>
-            <TabsTrigger value="signup">Sign Up</TabsTrigger>
+        <Tabs defaultValue="signin" className="w-full animate-fade-in-delay">
+          <TabsList className="grid w-full grid-cols-2 mb-8 bg-muted/50 backdrop-blur-sm">
+            <TabsTrigger value="signin" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+              Sign In
+            </TabsTrigger>
+            <TabsTrigger value="signup" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+              Sign Up
+            </TabsTrigger>
           </TabsList>
 
           <TabsContent value="signin">
-            <Card>
-              <CardHeader>
-                <CardTitle>Welcome Back</CardTitle>
-                <CardDescription>Sign in to your account</CardDescription>
+            <Card className="card-elevated">
+              <CardHeader className="text-center pb-4">
+                <CardTitle className="text-2xl">Welcome Back</CardTitle>
+                <CardDescription className="text-base">Sign in to your account to continue learning</CardDescription>
               </CardHeader>
-              <CardContent>
-                <form onSubmit={handleSignIn} className="space-y-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="signin-email">Email</Label>
+              <CardContent className="space-y-6">
+                <form onSubmit={handleSignIn} className="space-y-6">
+                  <div className="space-y-3">
+                    <Label htmlFor="signin-email" className="text-sm font-medium">Email Address</Label>
                     <Input
                       id="signin-email"
                       type="email"
+                      placeholder="Enter your email"
                       value={signInData.email}
                       onChange={(e) => setSignInData(prev => ({ ...prev, email: e.target.value }))}
+                      className="h-12 text-base"
                       required
                     />
                   </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="signin-password">Password</Label>
+                  <div className="space-y-3">
+                    <Label htmlFor="signin-password" className="text-sm font-medium">Password</Label>
                     <Input
                       id="signin-password"
                       type="password"
+                      placeholder="Enter your password"
                       value={signInData.password}
                       onChange={(e) => setSignInData(prev => ({ ...prev, password: e.target.value }))}
+                      className="h-12 text-base"
                       required
                     />
                   </div>
-                  <Button type="submit" className="w-full" disabled={loading}>
+                  <Button 
+                    type="submit" 
+                    className="w-full h-12 text-base font-semibold" 
+                    disabled={loading}
+                  >
                     {loading ? 'Signing In...' : 'Sign In'}
                   </Button>
                 </form>
@@ -114,66 +134,82 @@ const Auth = () => {
           </TabsContent>
 
           <TabsContent value="signup">
-            <Card>
-              <CardHeader>
-                <CardTitle>Create Account</CardTitle>
-                <CardDescription>Join our education platform</CardDescription>
+            <Card className="card-elevated">
+              <CardHeader className="text-center pb-4">
+                <CardTitle className="text-2xl">Create Account</CardTitle>
+                <CardDescription className="text-base">Join our education platform today</CardDescription>
               </CardHeader>
-              <CardContent>
-                <form onSubmit={handleSignUp} className="space-y-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="signup-name">Full Name</Label>
+              <CardContent className="space-y-6">
+                <form onSubmit={handleSignUp} className="space-y-6">
+                  <div className="space-y-3">
+                    <Label htmlFor="signup-name" className="text-sm font-medium">Full Name</Label>
                     <Input
                       id="signup-name"
                       type="text"
+                      placeholder="Enter your full name"
                       value={signUpData.fullName}
                       onChange={(e) => setSignUpData(prev => ({ ...prev, fullName: e.target.value }))}
+                      className="h-12 text-base"
                       required
                     />
                   </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="signup-email">Email</Label>
+                  <div className="space-y-3">
+                    <Label htmlFor="signup-email" className="text-sm font-medium">Email Address</Label>
                     <Input
                       id="signup-email"
                       type="email"
+                      placeholder="Enter your email"
                       value={signUpData.email}
                       onChange={(e) => setSignUpData(prev => ({ ...prev, email: e.target.value }))}
+                      className="h-12 text-base"
                       required
                     />
                   </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="signup-password">Password</Label>
+                  <div className="space-y-3">
+                    <Label htmlFor="signup-password" className="text-sm font-medium">Password</Label>
                     <Input
                       id="signup-password"
                       type="password"
+                      placeholder="Create a secure password"
                       value={signUpData.password}
                       onChange={(e) => setSignUpData(prev => ({ ...prev, password: e.target.value }))}
+                      className="h-12 text-base"
                       required
                     />
                   </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="role">Role</Label>
+                  <div className="space-y-3">
+                    <Label htmlFor="role" className="text-sm font-medium">Choose Your Role</Label>
                     <Select value={signUpData.role} onValueChange={(value: 'student' | 'teacher') => setSignUpData(prev => ({ ...prev, role: value }))}>
-                      <SelectTrigger>
+                      <SelectTrigger className="h-12 text-base">
                         <SelectValue placeholder="Select your role" />
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="student">
-                          <div className="flex items-center gap-2">
-                            <BookOpen className="h-4 w-4" />
-                            Student
+                          <div className="flex items-center gap-3 py-2">
+                            <BookOpen className="h-5 w-5 text-primary" />
+                            <div>
+                              <div className="font-medium">Student</div>
+                              <div className="text-xs text-muted-foreground">Learn from expert teachers</div>
+                            </div>
                           </div>
                         </SelectItem>
                         <SelectItem value="teacher">
-                          <div className="flex items-center gap-2">
-                            <Users className="h-4 w-4" />
-                            Teacher
+                          <div className="flex items-center gap-3 py-2">
+                            <Users className="h-5 w-5 text-success" />
+                            <div>
+                              <div className="font-medium">Teacher</div>
+                              <div className="text-xs text-muted-foreground">Share knowledge with students</div>
+                            </div>
                           </div>
                         </SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
-                  <Button type="submit" className="w-full" disabled={loading || !signUpData.role}>
+                  <Button 
+                    type="submit" 
+                    className="w-full h-12 text-base font-semibold" 
+                    disabled={loading || !signUpData.role}
+                  >
                     {loading ? 'Creating Account...' : 'Create Account'}
                   </Button>
                 </form>

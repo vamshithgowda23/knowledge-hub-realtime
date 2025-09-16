@@ -17,7 +17,7 @@ interface AuthContextType {
   session: Session | null;
   profile: Profile | null;
   loading: boolean;
-  signUp: (email: string, password: string, fullName: string, role: 'student' | 'teacher') => Promise<{ error?: any }>;
+  signUp: (email: string, password: string, fullName: string, role: 'student' | 'teacher') => Promise<{ error?: any; needsConfirmation?: boolean }>;
   signIn: (email: string, password: string) => Promise<{ error?: any }>;
   signOut: () => Promise<void>;
 }
@@ -87,9 +87,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const signUp = async (email: string, password: string, fullName: string, role: 'student' | 'teacher') => {
     try {
-      const redirectUrl = `${window.location.origin}/`;
+      const redirectUrl = `${window.location.origin}/dashboard`;
       
-      const { error } = await supabase.auth.signUp({
+      const { data, error } = await supabase.auth.signUp({
         email,
         password,
         options: {
@@ -110,9 +110,18 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         return { error };
       }
       
+      // If user needs to confirm email
+      if (data.user && !data.session) {
+        toast({
+          title: "Check Your Email",
+          description: "Please check your email and click the confirmation link to complete your registration."
+        });
+        return { needsConfirmation: true };
+      }
+      
       toast({
         title: "Success",
-        description: "Account created successfully! Please check your email to verify your account."
+        description: "Account created successfully!"
       });
       
       return {};
@@ -129,9 +138,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       });
       
       if (error) {
+        let errorMessage = error.message;
+        if (error.message.includes('Email not confirmed')) {
+          errorMessage = "Please check your email and click the confirmation link before signing in.";
+        }
         toast({
           title: "Sign In Error", 
-          description: error.message,
+          description: errorMessage,
           variant: "destructive"
         });
         return { error };

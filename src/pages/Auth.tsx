@@ -45,16 +45,17 @@ const Auth = () => {
     
     setLoading(true);
     
-    const { error } = await signUp(
+    const { error, needsConfirmation } = await signUp(
       signUpData.email,
       signUpData.password,
       signUpData.fullName,
       signUpData.role
     );
     
-    if (!error) {
+    if (!error && !needsConfirmation) {
       navigate('/dashboard');
     }
+    // If needsConfirmation is true, user stays on auth page with the toast message
     
     setLoading(false);
   };

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -11,8 +11,15 @@ import { BookOpen, Users } from 'lucide-react';
 
 const Auth = () => {
   const navigate = useNavigate();
-  const { signIn, signUp } = useAuth();
+  const { signIn, signUp, user, profile } = useAuth();
   const [loading, setLoading] = useState(false);
+
+  // Redirect authenticated users to dashboard
+  useEffect(() => {
+    if (user && profile) {
+      navigate('/dashboard');
+    }
+  }, [user, profile, navigate]);
   
   const [signInData, setSignInData] = useState({
     email: '',

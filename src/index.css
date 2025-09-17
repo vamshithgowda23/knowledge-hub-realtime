@@ -135,6 +135,19 @@
     @apply bg-background text-foreground font-sans antialiased;
   }
 
+  /* Hide any unwanted mobile UI elements */
+  @media (max-width: 768px) {
+    /* Hide Lovable mobile remix/theme toggle buttons */
+    [data-testid="remix-button"],
+    [data-testid="theme-toggle"],
+    .remix-button,
+    .theme-toggle,
+    .lovable-mobile-controls {
+      display: none !important;
+      visibility: hidden !important;
+    }
+  }
+
   /* Professional Typography */
   h1, h2, h3, h4, h5, h6 {
     @apply font-semibold tracking-tight;

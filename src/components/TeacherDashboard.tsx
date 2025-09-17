@@ -147,12 +147,12 @@ const TeacherDashboard = () => {
       </div>
 
       {/* Statistics */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <Card>
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <Card className="card-elevated">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-2xl font-bold text-foreground">{pendingQuestions.length}</p>
+                <p className="text-2xl font-bold text-orange-500">{pendingQuestions.length}</p>
                 <p className="text-sm text-muted-foreground">Pending Questions</p>
               </div>
               <Clock className="h-8 w-8 text-orange-500" />
@@ -160,26 +160,26 @@ const TeacherDashboard = () => {
           </CardContent>
         </Card>
         
-        <Card>
+        <Card className="card-elevated">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-2xl font-bold text-foreground">{answeredQuestions.length}</p>
+                <p className="text-2xl font-bold text-success">{answeredQuestions.length}</p>
                 <p className="text-sm text-muted-foreground">Answered Questions</p>
               </div>
-              <CheckCircle className="h-8 w-8 text-green-500" />
+              <CheckCircle className="h-8 w-8 text-success" />
             </div>
           </CardContent>
         </Card>
         
-        <Card>
+        <Card className="card-elevated">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-2xl font-bold text-foreground">{questions.length}</p>
+                <p className="text-2xl font-bold text-primary">{questions.length}</p>
                 <p className="text-sm text-muted-foreground">Total Questions</p>
               </div>
-              <MessageSquare className="h-8 w-8 text-blue-500" />
+              <MessageSquare className="h-8 w-8 text-primary" />
             </div>
           </CardContent>
         </Card>
@@ -293,10 +293,16 @@ const TeacherDashboard = () => {
       )}
 
       {questions.length === 0 && (
-        <Card>
-          <CardContent className="pt-6 text-center">
-            <MessageSquare className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-            <p className="text-muted-foreground">No questions yet. Students will see your name when asking questions!</p>
+        <Card className="card-elevated">
+          <CardContent className="pt-6 text-center py-12">
+            <MessageSquare className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
+            <h3 className="text-lg font-semibold text-foreground mb-2">Ready to Help Students</h3>
+            <p className="text-muted-foreground mb-4">
+              Students can see your name when selecting teachers to ask questions.
+            </p>
+            <p className="text-sm text-muted-foreground">
+              New questions will appear here automatically when students ask them.
+            </p>
           </CardContent>
         </Card>
       )}

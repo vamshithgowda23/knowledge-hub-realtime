@@ -184,9 +184,9 @@ const StudentDashboard = () => {
       </div>
 
       {/* Ask Question Form */}
-      <Card>
+      <Card className="card-elevated">
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
+          <CardTitle className="flex items-center gap-2 text-lg sm:text-xl">
             <MessageSquare className="h-5 w-5" />
             Ask a Question
           </CardTitle>
@@ -201,17 +201,32 @@ const StudentDashboard = () => {
                 Select Teacher
               </label>
               <Select value={selectedTeacher} onValueChange={setSelectedTeacher}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Choose a teacher" />
+                <SelectTrigger className="h-12">
+                  <SelectValue placeholder="Choose a teacher to ask your question" />
                 </SelectTrigger>
                 <SelectContent>
                   {teachers.map((teacher) => (
                     <SelectItem key={teacher.id} value={teacher.user_id}>
-                      {teacher.full_name}
+                      <div className="flex items-center gap-2 py-1">
+                        <div className="w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center">
+                          <span className="text-xs font-semibold text-primary">
+                            {teacher.full_name.split(' ').map(n => n[0]).join('')}
+                          </span>
+                        </div>
+                        <span className="font-medium">{teacher.full_name}</span>
+                      </div>
                     </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
+              {selectedTeacher && teachers.find(t => t.user_id === selectedTeacher) && (
+                <div className="flex items-center gap-2 text-sm text-success mt-2 p-3 bg-success/10 rounded-lg">
+                  <span className="font-medium">Selected Teacher:</span>
+                  <span className="text-success-foreground">
+                    {teachers.find(t => t.user_id === selectedTeacher)?.full_name}
+                  </span>
+                </div>
+              )}
             </div>
             <div className="space-y-2">
               <label htmlFor="question" className="text-sm font-medium">
@@ -219,15 +234,20 @@ const StudentDashboard = () => {
               </label>
               <Textarea
                 id="question"
-                placeholder="Type your question here..."
+                placeholder="Describe your question in detail. The more specific you are, the better help you'll receive..."
                 value={newQuestion}
                 onChange={(e) => setNewQuestion(e.target.value)}
                 rows={4}
+                className="resize-none"
               />
             </div>
-            <Button type="submit" disabled={loading || !newQuestion.trim() || !selectedTeacher} className="w-full">
+            <Button 
+              type="submit" 
+              disabled={loading || !newQuestion.trim() || !selectedTeacher} 
+              className="w-full h-12 text-base font-semibold"
+            >
               <Send className="h-4 w-4 mr-2" />
-              {loading ? 'Submitting...' : 'Submit Question'}
+              {loading ? 'Submitting Question...' : 'Submit Question'}
             </Button>
           </form>
         </CardContent>
@@ -237,47 +257,69 @@ const StudentDashboard = () => {
       <div className="space-y-4">
         <h3 className="text-xl font-semibold text-foreground">Your Questions</h3>
         {questions.length === 0 ? (
-          <Card>
-            <CardContent className="pt-6 text-center">
-              <p className="text-muted-foreground">No questions yet. Ask your first question above!</p>
+          <Card className="card-elevated">
+            <CardContent className="pt-6 text-center py-12">
+              <MessageSquare className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
+              <p className="text-muted-foreground text-lg mb-2">No questions yet</p>
+              <p className="text-sm text-muted-foreground">Ask your first question above to get started!</p>
             </CardContent>
           </Card>
         ) : (
           questions.map((question) => (
-            <Card key={question.id}>
+            <Card key={question.id} className="card-elevated">
               <CardHeader>
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-2">
-                      <Badge variant={question.status === 'answered' ? 'default' : 'secondary'}>
+                    <div className="flex items-center gap-2 mb-3">
+                      <Badge 
+                        variant={question.status === 'answered' ? 'default' : 'secondary'}
+                        className="font-medium"
+                      >
                         {question.status === 'answered' ? (
                           <CheckCircle className="h-3 w-3 mr-1" />
                         ) : (
                           <Clock className="h-3 w-3 mr-1" />
                         )}
-                        {question.status}
+                        {question.status === 'answered' ? 'Answered' : 'Pending Response'}
                       </Badge>
-                      <span className="text-sm text-muted-foreground">
-                        To: {question.profiles.full_name}
-                      </span>
+                      <div className="flex items-center gap-1 text-sm text-muted-foreground">
+                        <span>Asked to:</span>
+                        <span className="font-semibold text-primary">
+                          {question.profiles.full_name}
+                        </span>
+                      </div>
                     </div>
-                    <CardTitle className="text-base">{question.content}</CardTitle>
+                    <CardTitle className="text-base mb-2 leading-relaxed">{question.content}</CardTitle>
                     <CardDescription>
-                      Asked on {new Date(question.created_at).toLocaleDateString()}
+                      Asked on {new Date(question.created_at).toLocaleDateString('en-US', {
+                        weekday: 'short',
+                        year: 'numeric',
+                        month: 'short',
+                        day: 'numeric'
+                      })}
                     </CardDescription>
                   </div>
                 </div>
               </CardHeader>
               {question.answers && question.answers.length > 0 && (
                 <CardContent>
-                  <div className="bg-muted/50 rounded-lg p-4">
-                    <h4 className="font-medium text-foreground mb-2">Answer:</h4>
+                  <div className="bg-success/5 border border-success/20 rounded-lg p-4">
+                    <div className="flex items-center gap-2 mb-3">
+                      <CheckCircle className="h-4 w-4 text-success" />
+                      <h4 className="font-semibold text-success">Answer from {question.profiles.full_name}:</h4>
+                    </div>
                     {question.answers.map((answer) => (
                       <div key={answer.id}>
-                        <p className="text-foreground mb-2">{answer.content}</p>
+                        <p className="text-foreground mb-3 leading-relaxed">{answer.content}</p>
                         <p className="text-xs text-muted-foreground">
-                          Answered by {answer.profiles.full_name} on{' '}
-                          {new Date(answer.created_at).toLocaleDateString()}
+                          Answered on {new Date(answer.created_at).toLocaleDateString('en-US', {
+                            weekday: 'short',
+                            year: 'numeric',
+                            month: 'short',
+                            day: 'numeric',
+                            hour: '2-digit',
+                            minute: '2-digit'
+                          })}
                         </p>
                       </div>
                     ))}

@@ -35,11 +35,11 @@ const Dashboard = () => {
   return (
     <div className="min-h-screen bg-background">
       <header className="border-b bg-card/80 backdrop-blur-md sticky top-0 z-50">
-        <div className="container mx-auto px-6 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-3">
-              <BookOpen className="h-8 w-8 text-primary" />
-              <h1 className="text-2xl font-bold text-gradient">EduConnect</h1>
+        <div className="container mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
+          <div className="flex items-center gap-2 sm:gap-4">
+            <div className="flex items-center gap-2 sm:gap-3">
+              <BookOpen className="h-6 w-6 sm:h-8 sm:w-8 text-primary" />
+              <h1 className="text-lg sm:text-2xl font-bold text-gradient">EduConnect</h1>
             </div>
             <div className="hidden md:block h-6 w-px bg-border"></div>
             <div className="hidden md:block">
@@ -54,6 +54,7 @@ const Dashboard = () => {
           <Button 
             variant="outline" 
             onClick={signOut} 
+            size="sm"
             className="flex items-center gap-2 hover:bg-destructive/10 hover:text-destructive hover:border-destructive/20"
           >
             <LogOut className="h-4 w-4" />
@@ -62,7 +63,7 @@ const Dashboard = () => {
         </div>
       </header>
 
-      <main className="container mx-auto px-6 py-8">
+      <main className="container mx-auto px-4 sm:px-6 py-4 sm:py-8">
         <div className="animate-fade-in-delay">
           {profile.role === 'student' ? (
             <StudentDashboard />
